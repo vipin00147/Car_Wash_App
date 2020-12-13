@@ -15,7 +15,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +31,7 @@ public class Admin_Login extends AppCompatActivity {
     TextInputLayout Email,Password;
     Button Admin_Login, Customer_Login;
     TextView Create_Account;
+    FirebaseAuth fAuth;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
     ProgressBar progressBar;
@@ -44,46 +49,47 @@ public class Admin_Login extends AppCompatActivity {
         Customer_Login = findViewById(R.id.Customer_Login);
         Create_Account = findViewById(R.id.SignUp);
         progressBar = findViewById(R.id.progressBar2);
+        fAuth = FirebaseAuth.getInstance();
+
+        if(fAuth.getCurrentUser() != null){
+            startActivity(new Intent(getApplicationContext(), Admin_Home.class));
+            finish();
+        }
 
         //Login As Admin..
         Admin_Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-
                 String email = Email.getEditText().getText().toString().trim();
                 String password = Password.getEditText().getText().toString().trim();
+                if(TextUtils.isEmpty(email)) {
+                    Email.setError("Email is required");
+                    return;
+                }
+                if(TextUtils.isEmpty(password)) {
+                    Password.setError("Password is Required");
+                    return;
+                }
 
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("Admin");
+                if(password.length()<6) {
+                    Password.setError("Password Must be >= 6");
+                    return;
+                }
 
-                //check query whether the entered username and password is present or not....
-                Query checkUser = reference.orderByChild("username").equalTo(email);
+                progressBar.setVisibility(View.VISIBLE);
 
-                checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                // Sign in using FireBase..
+                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot datasnapshot) {
-                        if(datasnapshot.exists()) {
-
-                            //fetching data from database...
-                            String name = datasnapshot.child(email).child("username").getValue(String.class);
-                            String pass = datasnapshot.child(email).child("password").getValue(String.class);
-
-                            //matching entered username and password is correct or not....
-                           if(TextUtils.equals(name,email) && TextUtils.equals(pass,password)){
-                                Toast.makeText(Admin_Login.this, "Welcome "+name, Toast.LENGTH_SHORT).show();
-                            }
-                            progressBar.setVisibility(View.GONE);
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            startActivity(new Intent(getApplicationContext(), Admin_Home.class));
+                            finish();
                         }
                         else{
-                            Toast.makeText(Admin_Login.this, "Username doesn't exist", Toast.LENGTH_SHORT).show();
+                            ///
                             progressBar.setVisibility(View.GONE);
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 });
             }
