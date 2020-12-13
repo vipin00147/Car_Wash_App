@@ -89,9 +89,6 @@ public class Admin_Login extends AppCompatActivity {
             }
         });
 
-
-
-
         //Go to customer Login Page
         Customer_Login.setOnClickListener(new View.OnClickListener() {
             @Override
