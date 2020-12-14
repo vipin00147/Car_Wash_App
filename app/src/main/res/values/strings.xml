@@ -2,4 +2,9 @@
     <string name="app_name">Car Wash App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Appointments">Appoints</string>
+    <string name="Add_User">Add User</string>
+    <string name="Add_Center">Add Centers</string>
+    <string name="List_center">List center</string>
+    <string name="profile">Profile</string>
 </resources>
