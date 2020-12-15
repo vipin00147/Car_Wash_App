@@ -53,6 +53,6 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
     implementation "androidx.cardview:cardview:1.0.0"
-
+    implementation 'com.github.f0ris.sweetalert:library:1.5.6'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
 }

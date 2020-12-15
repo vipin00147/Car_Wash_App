@@ -27,6 +27,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+
 public class Admin_Login extends AppCompatActivity {
     TextInputLayout Email,Password;
     Button Admin_Login, Customer_Login;
@@ -66,14 +69,24 @@ public class Admin_Login extends AppCompatActivity {
                     Email.setError("Email is required");
                     return;
                 }
+                else {
+                    Email.setError(null);
+                    Email.setErrorEnabled(false);
+                }
                 if(TextUtils.isEmpty(password)) {
                     Password.setError("Password is Required");
                     return;
+                }                else {
+                    Password.setError(null);
+                    Password.setErrorEnabled(false);
                 }
 
                 if(password.length()<6) {
                     Password.setError("Password Must be >= 6");
                     return;
+                } else {
+                    Password.setError(null);
+                    Password.setErrorEnabled(false);
                 }
 
                 progressBar.setVisibility(View.VISIBLE);
@@ -87,7 +100,10 @@ public class Admin_Login extends AppCompatActivity {
                             finish();
                         }
                         else{
-                            Toast.makeText(Admin_Login.this,"Failed to Login", Toast.LENGTH_SHORT).show();
+                            new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Oops...")
+                                    .setContentText(task.getException().getMessage())
+                                    .show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }

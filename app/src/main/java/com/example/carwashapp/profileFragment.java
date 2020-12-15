@@ -26,11 +26,13 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class profileFragment extends Fragment {
 
     FirebaseAuth fAuth;
     TextInputLayout edit_password, edit_email, edit_phone;
-    TextView name, email,forgot;
+    TextView name, email,update_email;
     MaterialButton save, logout;
 
     @Override
@@ -43,7 +45,7 @@ public class profileFragment extends Fragment {
         edit_email = view.findViewById(R.id.edit_email);
         edit_password = view.findViewById(R.id.edit_password);
         edit_phone = view.findViewById(R.id.edit_phone);
-        forgot = view.findViewById(R.id.forgot);
+        update_email = view.findViewById(R.id.update_admin_email);
         save = view.findViewById(R.id.save_edit);
         logout = view.findViewById(R.id.admin_logout);
 
@@ -69,26 +71,64 @@ public class profileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String email = edit_email.getEditText().getText().toString().trim();
+                String password = edit_password.getEditText().getText().toString().trim();
                 String phone = edit_phone.getEditText().getText().toString().trim();
-                String name = edit_password.getEditText().getText().toString().trim();
+
+                if(TextUtils.isEmpty(email)){
+                    edit_email.setError("Field Required");
+                }else {
+                    edit_email.setError(null);
+                    edit_email.setErrorEnabled(false);
+                }
+                if(!TextUtils.isEmpty(password) && password.length()<6){
+                    edit_password.setError("Password Should be greater then or equal 6");
+                }
+                else{
+                    edit_password.setError(null);
+                    edit_password.setErrorEnabled(false);
+                }
+                if(!TextUtils.isEmpty(phone) && phone.length()<10){
+                    edit_phone.setError("Phone number should be = 10 and not be empty");
+                }
+                else{
+                    edit_phone.setError(null);
+                    edit_phone.setErrorEnabled(false);
+                }
+
+                if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) &&
+                        !(password.length()<6)){
+
+                    String new_email = edit_email.getEditText().getText().toString().trim();
+                    fAuth.sendPasswordResetEmail(new_email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                new SweetAlertDialog(getContext(),SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText("Done")
+                                        .setContentText("Password reset link is sent on your registered email")
+                                        .setConfirmText("Ok")
+                                        .setConfirmClickListener(null)
+                                        .show();
+                            }
+                            else{
+                                new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Oops!")
+                                        .setContentText(task.getException().toString())
+                                        .setConfirmText("Ok")
+                                        .setConfirmClickListener(null)
+                                        .show();
+                            }
+                        }
+                    });
+                }
             }
         });
 
-        forgot.setOnClickListener(new View.OnClickListener() {
+        update_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = edit_email.getEditText().getText().toString().trim();
-                fAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(getContext(), "Mail Sent", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                fAuth.getCurrentUser().updateEmail(email);
             }
         });
 
