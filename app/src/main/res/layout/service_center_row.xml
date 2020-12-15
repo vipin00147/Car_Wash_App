@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="10dp"
+        app:cardElevation="10dp"
+        android:outlineAmbientShadowColor="#03A9F4"
+        android:outlineSpotShadowColor="#03A9F4">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="87dp"
+                android:layout_height="107dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="23dp"
+                android:src="@drawable/car_logo"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="2dp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/center_name"
+                android:layout_width="match_parent"
+                android:focusable="false"
+                android:layout_height="25dp"
+                android:layout_alignParentTop="true"
+                android:inputType="textNoSuggestions"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="-89dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="0dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:background="@color/white"
+                android:text="RS Service Center"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:background="@color/white"
+                android:layout_marginTop="40dp"
+                android:inputType="textNoSuggestions"
+                android:layout_marginStart="13dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:text="Address : "
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/center_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/center_name"
+                android:layout_marginStart="110dp"
+                android:focusable="false"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:inputType="textNoSuggestions"
+                android:background="@color/white"
+                android:text="Rajpura"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/three"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:focusable="false"
+                android:layout_below="@+id/two"
+                android:layout_marginStart="13dp"
+                android:inputType="textNoSuggestions"
+                android:layout_toEndOf="@+id/profile_image"
+                android:text="Phone No : "
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/center_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/center_address"
+                android:focusable="false"
+                android:layout_marginStart="110dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:inputType="textNoSuggestions"
+                android:background="@color/white"
+                android:text="8976545787"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/four"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:background="@color/white"
+                android:layout_below="@+id/three"
+                android:layout_marginStart="13dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:inputType="textNoSuggestions"
+                android:text="Pin Code : "
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/center_pin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/center_phone"
+                android:layout_marginStart="109dp"
+                android:focusable="false"
+                android:layout_marginTop="-2dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:inputType="textNoSuggestions"
+                android:background="@color/white"
+                android:text="125055"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/five"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:focusable="false"
+                android:layout_below="@+id/four"
+                android:layout_marginStart="13dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:inputType="textNoSuggestions"
+                android:text="Opening Hours : "
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/center_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="textNoSuggestions"
+                android:layout_below="@+id/center_pin"
+                android:layout_marginStart="153dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@+id/profile_image"
+                android:background="@color/white"
+                android:text="8am-8pm"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

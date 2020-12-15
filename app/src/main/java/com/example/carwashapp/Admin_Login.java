@@ -87,7 +87,7 @@ public class Admin_Login extends AppCompatActivity {
                             finish();
                         }
                         else{
-                            ///
+                            Toast.makeText(Admin_Login.this,"Failed to Login", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }

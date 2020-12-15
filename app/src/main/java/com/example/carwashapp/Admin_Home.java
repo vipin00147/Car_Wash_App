@@ -1,16 +1,12 @@
 package com.example.carwashapp;
 
-import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Admin_Home extends AppCompatActivity {
@@ -54,13 +50,12 @@ public class Admin_Home extends AppCompatActivity {
             }
         });
 
-       // navigation.setOnNavigationItemSelectedListener(navListener);
+        //navigation.setOnNavigationItemSelectedListener(navListener);
     }
 
     private  void setUpViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(adapter);
-
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -69,7 +64,23 @@ public class Admin_Home extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-
+                switch (position) {
+                    case 0:
+                        navigation.getMenu().findItem(R.id.item1).setChecked(true);
+                        break;
+                    case 1:
+                        navigation.getMenu().findItem(R.id.item2).setChecked(true);
+                        break;
+                    case 2:
+                        navigation.getMenu().findItem(R.id.item3).setChecked(true);
+                        break;
+                    case 3:
+                        navigation.getMenu().findItem(R.id.item4).setChecked(true);
+                        break;
+                    case 4:
+                        navigation.getMenu().findItem(R.id.item5).setChecked(true);
+                        break;
+                }
             }
 
             @Override
