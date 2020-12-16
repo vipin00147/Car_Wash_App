@@ -1,9 +1,12 @@
 package com.example.carwashapp;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +21,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class AddServiceCenterFragment extends Fragment {
     TextInputLayout Service_center_name;
     TextInputLayout Phone_no, Address, Opening_hours, Pin_code;
     FloatingActionButton Done;
-    ProgressBar progressBar;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
 
@@ -39,7 +43,6 @@ public class AddServiceCenterFragment extends Fragment {
         Opening_hours = view.findViewById(R.id.opening_hours);
         Pin_code = view.findViewById(R.id.Pin_code);
         Done = view.findViewById(R.id.fab);
-        progressBar = view.findViewById(R.id.progressBar);
 
         Done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,8 +52,6 @@ public class AddServiceCenterFragment extends Fragment {
                 String ADDRESS = Address.getEditText().getText().toString().trim();
                 String OPENING_HOURS = Opening_hours.getEditText().getText().toString().trim();
                 String PIN_CODE = Pin_code.getEditText().getText().toString().trim();
-
-                progressBar.setVisibility(View.VISIBLE);        //make progressBar visible
 
                 if(TextUtils.isEmpty(CENTER_NAME))              //Apply Empty validation
                     Service_center_name.setError("Input Field required");
@@ -93,10 +94,35 @@ public class AddServiceCenterFragment extends Fragment {
 
                     reference.child(CENTER_NAME).setValue(users);
 
-                    Toast.makeText(view.getContext(), "Successfully Added", Toast.LENGTH_SHORT).show();
+                    SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+                    pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                    pDialog.setTitleText("Loading ...");
+                    pDialog.setCancelable(true);
+                    pDialog.show();
 
-                    //startActivity(new Intent(getApplicationContext(),Login.class));
-                    progressBar.setVisibility(View.GONE);
+                    final Handler handler  = new Handler();
+                    final Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (pDialog.isShowing()) {
+                                pDialog.dismiss();
+                            }
+                        }
+                    };
+
+                    pDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            handler.removeCallbacks(runnable);
+                            new SweetAlertDialog(getContext(),SweetAlertDialog.SUCCESS_TYPE)
+                                    .setTitleText("Done")
+                                    .setContentText("Service Center Successfully")
+                                    .show();
+                        }
+                    });
+
+                    handler.postDelayed(runnable, 3000);
+
                     Service_center_name.getEditText().setText("");
                     Phone_no.getEditText().setText("");
                     Address.getEditText().setText("");
@@ -105,7 +131,10 @@ public class AddServiceCenterFragment extends Fragment {
 
                 }
                 else{
-                    progressBar.setVisibility(View.GONE);
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Error")
+                            .setContentText("All Fields Are Required")
+                            .show();
                 }
             }
         });

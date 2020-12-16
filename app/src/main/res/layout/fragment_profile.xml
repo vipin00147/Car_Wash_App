@@ -169,7 +169,7 @@
         android:id="@+id/admin_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="#03A9F4"
         android:text="Log Out"
         android:textColor="#ffffff"

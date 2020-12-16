@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,7 +38,6 @@ public class Admin_Login extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
-    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,6 @@ public class Admin_Login extends AppCompatActivity {
         Admin_Login = findViewById(R.id.Admin_Login);
         Customer_Login = findViewById(R.id.Customer_Login);
         Create_Account = findViewById(R.id.SignUp);
-        progressBar = findViewById(R.id.progressBar2);
         fAuth = FirebaseAuth.getInstance();
 
         if(fAuth.getCurrentUser() != null){
@@ -90,8 +89,6 @@ public class Admin_Login extends AppCompatActivity {
                     Password.setErrorEnabled(false);
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
-
                 // Sign in using FireBase..
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("Admin");
@@ -101,6 +98,7 @@ public class Admin_Login extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
+
                             String db_password = snapshot.child(username).child("password").getValue(String.class);
                             if(db_password.equals(password)){
                                 String email = snapshot.child(username).child("email").getValue(String.class);
@@ -117,7 +115,6 @@ public class Admin_Login extends AppCompatActivity {
                                                     .setTitleText("Oops...")
                                                     .setContentText(task.getException().getMessage())
                                                     .show();
-                                            progressBar.setVisibility(View.GONE);
                                         }
                                     }
                                 });
@@ -127,7 +124,6 @@ public class Admin_Login extends AppCompatActivity {
                                         .setTitleText("Oops...")
                                         .setContentText("Wrong Password")
                                         .show();
-                                progressBar.setVisibility(View.GONE);
                             }
                         }
                         else{
@@ -135,7 +131,6 @@ public class Admin_Login extends AppCompatActivity {
                                     .setTitleText("Oops...")
                                     .setContentText("No DATA Exist")
                                     .show();
-                            progressBar.setVisibility(View.GONE);
                         }
                     }
 
