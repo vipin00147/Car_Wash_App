@@ -203,7 +203,7 @@
         android:backgroundTint="#03A9F4"
         android:elevation="10dp"
         app:elevation="10dp"
-        android:tint="@color/white"
+        android:tint="#ffffff"
         android:layout_below="@id/cardView"/>
 
 

@@ -31,7 +31,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class Admin_Login extends AppCompatActivity {
-    TextInputLayout Email,Password;
+    TextInputLayout Username, Password;
     Button Admin_Login, Customer_Login;
     TextView Create_Account;
     FirebaseAuth fAuth;
@@ -46,7 +46,7 @@ public class Admin_Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin__login);
 
-        Email = findViewById(R.id.Email);
+        Username = findViewById(R.id.username);
         Password = findViewById(R.id.Password);
         Admin_Login = findViewById(R.id.Admin_Login);
         Customer_Login = findViewById(R.id.Customer_Login);
@@ -63,15 +63,16 @@ public class Admin_Login extends AppCompatActivity {
         Admin_Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = Email.getEditText().getText().toString().trim();
+
+                String username = Username.getEditText().getText().toString().trim();
                 String password = Password.getEditText().getText().toString().trim();
-                if(TextUtils.isEmpty(email)) {
-                    Email.setError("Email is required");
+                if(TextUtils.isEmpty(username)) {
+                    Username.setError("Username is required");
                     return;
                 }
                 else {
-                    Email.setError(null);
-                    Email.setErrorEnabled(false);
+                    Username.setError(null);
+                    Username.setErrorEnabled(false);
                 }
                 if(TextUtils.isEmpty(password)) {
                     Password.setError("Password is Required");
@@ -92,20 +93,55 @@ public class Admin_Login extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Sign in using FireBase..
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                rootNode = FirebaseDatabase.getInstance();
+                reference = rootNode.getReference("Admin");
+
+                Query checkUser = reference.orderByChild("username").equalTo(username);
+                checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            startActivity(new Intent(getApplicationContext(), Admin_Home.class));
-                            finish();
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            String db_password = snapshot.child(username).child("password").getValue(String.class);
+                            if(db_password.equals(password)){
+                                String email = snapshot.child(username).child("email").getValue(String.class);
+
+                                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if(task.isSuccessful()){
+                                            startActivity(new Intent(getApplicationContext(), Admin_Home.class));
+                                            finish();
+                                        }
+                                        else{
+                                            new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
+                                                    .setTitleText("Oops...")
+                                                    .setContentText(task.getException().getMessage())
+                                                    .show();
+                                            progressBar.setVisibility(View.GONE);
+                                        }
+                                    }
+                                });
+                            }
+                            else{
+                                new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Oops...")
+                                        .setContentText("Wrong Password")
+                                        .show();
+                                progressBar.setVisibility(View.GONE);
+                            }
                         }
                         else{
                             new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Oops...")
-                                    .setContentText(task.getException().getMessage())
+                                    .setContentText("No DATA Exist")
                                     .show();
                             progressBar.setVisibility(View.GONE);
                         }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
                     }
                 });
             }

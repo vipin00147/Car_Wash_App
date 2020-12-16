@@ -25,12 +25,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class profileFragment extends Fragment {
 
     FirebaseAuth fAuth;
+    FirebaseDatabase rootNode;
+    DatabaseReference referance;
     TextInputLayout edit_password, edit_email, edit_phone;
     TextView name, email,update_email;
     MaterialButton save, logout;
@@ -50,6 +54,8 @@ public class profileFragment extends Fragment {
         logout = view.findViewById(R.id.admin_logout);
 
         fAuth = FirebaseAuth.getInstance();
+        rootNode = FirebaseDatabase.getInstance();
+        referance = rootNode.getReference("Admin");
 
         //getting current user from FireBase To set name and other credentials..
         String Email = fAuth.getCurrentUser().getEmail();
@@ -58,12 +64,12 @@ public class profileFragment extends Fragment {
 
         // set their credentials...
         if (TextUtils.equals(Email, "vipin00147@gmail.com")){
-            name.setText("Vipin Kumar");
+            name.setText("Vipin");
             edit_email.getEditText().setText(Email);
         }
 
         else if (TextUtils.equals(Email, "srj2264@gmail.com")){
-            name.setText("Shreya Jain");
+            name.setText("Shreya");
             edit_email.getEditText().setText(Email);
         }
 
@@ -97,9 +103,24 @@ public class profileFragment extends Fragment {
 
                 if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) &&
                         !(password.length()<6)){
+                    String username = name.getText().toString();
 
                     String new_email = edit_email.getEditText().getText().toString().trim();
-                    fAuth.sendPasswordResetEmail(new_email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    Admin_Data admin = new Admin_Data(username,email,phone,password);
+
+
+                    referance.child(username).setValue(admin);
+
+                    fAuth.getCurrentUser().updatePassword(password);
+
+                    new SweetAlertDialog(getContext(),SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("Done")
+                            .setContentText("Email and Password Has changed Successfully")
+                            .setConfirmText("Ok")
+                            .setConfirmClickListener(null)
+                            .show();
+
+                   /*fAuth.sendPasswordResetEmail(new_email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
@@ -119,7 +140,7 @@ public class profileFragment extends Fragment {
                                         .show();
                             }
                         }
-                    });
+                    });*/
                 }
             }
         });

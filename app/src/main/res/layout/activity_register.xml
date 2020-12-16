@@ -26,7 +26,7 @@
         android:fontFamily="serif"
         android:gravity="center"
         android:text="Create a new Account"
-        android:textColor="@color/white"
+        android:textColor="#ffffff"
         android:textSize="30sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +40,8 @@
         android:layout_height="60dp"
         android:layout_margin="10dp"
         android:hint="Full Name"
+        app:boxStrokeColor="#ffffff"
+        app:hintTextColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +51,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/white"
+            android:textColor="#ffffff"
             android:textSize="20dp"
             android:inputType="text" />
 
@@ -62,6 +64,8 @@
         android:layout_height="60dp"
         android:layout_margin="10dp"
         android:hint="Email"
+        app:boxStrokeColor="#ffffff"
+        app:hintTextColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +75,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/white"
+            android:textColor="#ffffff"
             android:textSize="20dp"
             android:inputType="textEmailAddress" />
 
@@ -83,6 +87,8 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="10dp"
+        app:boxStrokeColor="#ffffff"
+        app:hintTextColor="#ffffff"
         android:layout_marginTop="180dp"
         android:hint="Password"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,7 +99,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:textColor="@color/white"
+            android:textColor="#ffffff"
             android:layout_height="match_parent"
             android:textSize="20dp"
             android:inputType="textPassword" />
@@ -107,13 +113,15 @@
         android:layout_height="60dp"
         android:layout_margin="10dp"
         android:hint="Phone No"
+        app:boxStrokeColor="#ffffff"
+        app:hintTextColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/white"
+            android:textColor="#ffffff"
             android:textSize="20dp"
             android:inputType="phone" />
 
@@ -129,6 +137,7 @@
         android:clickable="true"
         android:focusable="true"
         android:text="Register"
+        android:textColor="#ffffff"
         android:visibility="visible"
         app:backgroundTint="#03A9F4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -142,7 +151,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Already Registered? Sign in"
-        android:textColor="@color/white"
+        android:textColor="#ffffff"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
