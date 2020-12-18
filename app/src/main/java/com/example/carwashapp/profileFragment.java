@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,7 +53,6 @@ public class profileFragment extends Fragment {
         update_email = view.findViewById(R.id.update_admin_email);
         save = view.findViewById(R.id.save_edit);
         logout = view.findViewById(R.id.admin_logout);
-
         fAuth = FirebaseAuth.getInstance();
         rootNode = FirebaseDatabase.getInstance();
         referance = rootNode.getReference("Admin");

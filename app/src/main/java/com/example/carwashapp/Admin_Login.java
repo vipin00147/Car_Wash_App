@@ -53,111 +53,110 @@ public class Admin_Login extends AppCompatActivity {
         Create_Account = findViewById(R.id.SignUp);
         fAuth = FirebaseAuth.getInstance();
 
-        if(fAuth.getCurrentUser() != null){
+        if(fAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), Admin_Home.class));
             finish();
         }
+            //Login As Admin..
+            Admin_Login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-        //Login As Admin..
-        Admin_Login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                    String username = Username.getEditText().getText().toString().trim();
+                    String password = Password.getEditText().getText().toString().trim();
+                    if(TextUtils.isEmpty(username)) {
+                        Username.setError("Username is required");
+                        return;
+                    }
+                    else {
+                        Username.setError(null);
+                        Username.setErrorEnabled(false);
+                    }
+                    if(TextUtils.isEmpty(password)) {
+                        Password.setError("Password is Required");
+                        return;
+                    }                else {
+                        Password.setError(null);
+                        Password.setErrorEnabled(false);
+                    }
 
-                String username = Username.getEditText().getText().toString().trim();
-                String password = Password.getEditText().getText().toString().trim();
-                if(TextUtils.isEmpty(username)) {
-                    Username.setError("Username is required");
-                    return;
-                }
-                else {
-                    Username.setError(null);
-                    Username.setErrorEnabled(false);
-                }
-                if(TextUtils.isEmpty(password)) {
-                    Password.setError("Password is Required");
-                    return;
-                }                else {
-                    Password.setError(null);
-                    Password.setErrorEnabled(false);
-                }
+                    if(password.length()<6) {
+                        Password.setError("Password Must be >= 6");
+                        return;
+                    } else {
+                        Password.setError(null);
+                        Password.setErrorEnabled(false);
+                    }
 
-                if(password.length()<6) {
-                    Password.setError("Password Must be >= 6");
-                    return;
-                } else {
-                    Password.setError(null);
-                    Password.setErrorEnabled(false);
-                }
+                    // Sign in using FireBase..
+                    rootNode = FirebaseDatabase.getInstance();
+                    reference = rootNode.getReference("Admin");
 
-                // Sign in using FireBase..
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("Admin");
+                    Query checkUser = reference.orderByChild("username").equalTo(username);
+                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
 
-                Query checkUser = reference.orderByChild("username").equalTo(username);
-                checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()){
+                                String db_password = snapshot.child(username).child("password").getValue(String.class);
+                                if(db_password.equals(password)){
+                                    String email = snapshot.child(username).child("email").getValue(String.class);
 
-                            String db_password = snapshot.child(username).child("password").getValue(String.class);
-                            if(db_password.equals(password)){
-                                String email = snapshot.child(username).child("email").getValue(String.class);
-
-                                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if(task.isSuccessful()){
-                                            startActivity(new Intent(getApplicationContext(), Admin_Home.class));
-                                            finish();
+                                    fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if(task.isSuccessful()){
+                                                startActivity(new Intent(getApplicationContext(), Admin_Home.class));
+                                                finish();
+                                            }
+                                            else{
+                                                new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
+                                                        .setTitleText("Oops...")
+                                                        .setContentText(task.getException().getMessage())
+                                                        .show();
+                                            }
                                         }
-                                        else{
-                                            new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
-                                                    .setTitleText("Oops...")
-                                                    .setContentText(task.getException().getMessage())
-                                                    .show();
-                                        }
-                                    }
-                                });
+                                    });
+                                }
+                                else{
+                                    new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Oops...")
+                                            .setContentText("Wrong Password")
+                                            .show();
+                                }
                             }
                             else{
                                 new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Oops...")
-                                        .setContentText("Wrong Password")
+                                        .setContentText("No DATA Exist")
                                         .show();
                             }
                         }
-                        else{
-                            new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Oops...")
-                                    .setContentText("No DATA Exist")
-                                    .show();
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
-                    }
+                    });
+                }
+            });
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+            //Go to customer Login Page
+            Customer_Login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(),Login.class));
+                    finish();
+                }
+            });
 
-                    }
-                });
-            }
-        });
-
-        //Go to customer Login Page
-        Customer_Login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),Login.class));
-                finish();
-            }
-        });
-
-        //Go To Create Account Page;
-        Create_Account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),Register.class));
-                finish();
-            }
-        });
-    }
+            //Go To Create Account Page;
+            Create_Account.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(),Register.class));
+                    finish();
+                }
+            });
+        }
 }

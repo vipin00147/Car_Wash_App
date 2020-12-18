@@ -11,9 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CarWashApp">
-        <activity android:name=".Admin_Home"/>
-        <activity android:name=".Register"/>
-        <activity android:name=".Login"/>
+        <activity android:name=".User_Home"></activity>
+        <activity android:name=".Admin_Home" />
+        <activity android:name=".Register" />
+        <activity android:name=".Login" />
         <activity android:name=".Admin_Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

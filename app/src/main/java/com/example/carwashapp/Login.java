@@ -17,13 +17,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class Login extends AppCompatActivity {
-    TextInputLayout Email, Password;
+    TextInputLayout Id, Password;
     Button Signin,Login_Admin;
     TextView Signup;
-    ProgressBar progressBar;
     FirebaseAuth fAuth;
+    FirebaseDatabase rootNode;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,72 +41,133 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Email = findViewById(R.id.Email);
+        Id = findViewById(R.id.Email);
         Password = findViewById(R.id.Password);
         Signin = findViewById(R.id.Signin);
-        progressBar = findViewById(R.id.progressBar2);
         Login_Admin = findViewById(R.id.Admin_Login);
         Signup = findViewById(R.id.SignUp);
         fAuth = FirebaseAuth.getInstance();
 
-        if(fAuth.getCurrentUser() != null){
-            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        if(fAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(),User_Home.class));
+            finish();
         }
 
-        Signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Getting Values..
+            Signin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Getting Values..
 
-                String email = Email.getEditText().getText().toString().trim();
-                String password = Password.getEditText().getText().toString().trim();
-                if(TextUtils.isEmpty(email)) {
-                    Email.setError("Email is required");
-                    return;
-                }
-                if(TextUtils.isEmpty(password)) {
-                    Password.setError("Password is Required");
-                    return;
-                }
-
-                if(password.length()<6) {
-                    Password.setError("Password Must be >= 6");
-                    return;
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-
-                // Sign in using FireBase..
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Login.this, "Logged In Successfully", Toast.LENGTH_SHORT).show();
-
-                            //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            finish();
-                        }
-                        else{
-                            Toast.makeText(Login.this, "Error "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
+                    String id = Id.getEditText().getText().toString().trim();
+                    String password = Password.getEditText().getText().toString().trim();
+                    if(TextUtils.isEmpty(id)) {
+                        Id.setError("Email is required");
+                        return;
                     }
-                });
-            }
-        });
-        Login_Admin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Admin_Login.class));
-                finish();
-            }
-        });
-        Signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),Register.class));
-                finish();
-            }
-        });
+                    if(TextUtils.isEmpty(password)) {
+                        Password.setError("Password is Required");
+                        return;
+                    }
+
+                    if(password.length()<6) {
+                        Password.setError("Password Must be >= 6");
+                        return;
+                    }
+
+                    if(id.length()==10){
+
+                        // Sign in using Phone No and Password...
+                        rootNode = FirebaseDatabase.getInstance();
+                        reference = rootNode.getReference("Users");
+
+                        Query checkUser = reference.orderByChild("phone").equalTo(id);
+                        checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.exists()){
+
+                                    String db_password = snapshot.child(id).child("password").getValue(String.class);
+                                    if(db_password.equals(password)){
+                                        String email = snapshot.child(id).child("email").getValue(String.class);
+
+                                        fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if(task.isSuccessful()){
+                                                    startActivity(new Intent(getApplicationContext(), User_Home.class));
+                                                    finish();
+                                                }
+                                                else{
+                                                    new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                                                            .setTitleText("Oops...")
+                                                            .setContentText(task.getException().getMessage())
+                                                            .show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Oops...")
+                                                .setContentText("Wrong Password")
+                                                .show();
+                                    }
+                                }
+                                else{
+                                    new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Oops...")
+                                            .setContentText("No DATA Exist")
+                                            .show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+                    }
+                    else {
+                        // Sign in using Email Id and Password...
+                        fAuth.signInWithEmailAndPassword(id,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+
+                                    new SweetAlertDialog(Login.this, SweetAlertDialog.SUCCESS_TYPE)
+                                            .setTitleText("SUCCESS")
+                                            .setContentText("Login Successfully")
+                                            .show();
+
+                                    startActivity(new Intent(getApplicationContext(), User_Home.class));
+                                    finish();
+                                }
+                                else{
+                                    new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Failed")
+                                            .setContentText(task.getException().getMessage())
+                                            .show();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            Login_Admin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), Admin_Login.class));
+                    finish();
+                }
+            });
+            Signup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(),Register.class));
+                    finish();
+                }
+            });
     }
 }
