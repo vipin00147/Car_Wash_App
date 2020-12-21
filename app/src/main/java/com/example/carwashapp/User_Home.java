@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class User_Home extends AppCompatActivity {
 
@@ -45,7 +47,6 @@ public class User_Home extends AppCompatActivity {
                 return true;
             }
         });
-
     }
 
     private  void setUpViewPager() {

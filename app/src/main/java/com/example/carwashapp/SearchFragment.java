@@ -31,11 +31,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SearchFragment extends Fragment {
 
     RecyclerView recyclerView;
-    FirebaseDatabase rootNode;
     DatabaseReference reference;
     SearchView searchView;
+    Button book_appointment;
     Search_List_Adapter adapter;
-    Button button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,11 +42,11 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        reference = FirebaseDatabase.getInstance().getReference("Service_centers");
+        reference = FirebaseDatabase.getInstance().getReference().child("Service_centers");
         recyclerView = view.findViewById(R.id.reyclerView1);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        button = view.findViewById(R.id.book_appointment);
+        book_appointment = view.findViewById(R.id.book_appointment);
         searchView = view.findViewById(R.id.searchView);
 
         FirebaseRecyclerOptions<gettingListFromFirebase> options =
@@ -58,8 +57,36 @@ public class SearchFragment extends Fragment {
         adapter = new Search_List_Adapter(options);
         recyclerView.setAdapter(adapter);
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                processsearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                processsearch(query);
+                return false;
+            }
+        });
+
+
         return view;
     }
+
+    private void processsearch(String query) {
+        FirebaseRecyclerOptions<gettingListFromFirebase> options =
+                new FirebaseRecyclerOptions.Builder<gettingListFromFirebase>()
+                        .setQuery(reference.orderByChild("addess").startAt(query).endAt(query+"\uf8ff"), gettingListFromFirebase.class)
+                        .build();
+
+        adapter = new Search_List_Adapter(options);
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);
+    }
+
+
     @Override
     public void onStart() {
         super.onStart();

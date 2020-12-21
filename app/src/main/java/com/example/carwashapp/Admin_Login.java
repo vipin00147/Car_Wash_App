@@ -52,10 +52,14 @@ public class Admin_Login extends AppCompatActivity {
         Customer_Login = findViewById(R.id.Customer_Login);
         Create_Account = findViewById(R.id.SignUp);
         fAuth = FirebaseAuth.getInstance();
-
-        if(fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), Admin_Home.class));
-            finish();
+        try{
+            if(fAuth.getCurrentUser().getEmail() == "vipin00147@gmail.com" || fAuth.getCurrentUser().getEmail() == "srj2264@gmail.com"){
+                startActivity(new Intent(getApplicationContext(),Admin_Home.class));
+                finish();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
             //Login As Admin..
             Admin_Login.setOnClickListener(new View.OnClickListener() {
