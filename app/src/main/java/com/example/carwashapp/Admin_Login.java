@@ -66,6 +66,12 @@ public class Admin_Login extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
+                    SweetAlertDialog pDialog = new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.PROGRESS_TYPE);
+                    pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                    pDialog.setTitleText("Loading ...");
+                    pDialog.setCancelable(true);
+                    pDialog.show();
+
                     String username = Username.getEditText().getText().toString().trim();
                     String password = Password.getEditText().getText().toString().trim();
                     if(TextUtils.isEmpty(username)) {
@@ -73,13 +79,15 @@ public class Admin_Login extends AppCompatActivity {
                         return;
                     }
                     else {
+                        pDialog.dismiss();
                         Username.setError(null);
                         Username.setErrorEnabled(false);
                     }
                     if(TextUtils.isEmpty(password)) {
                         Password.setError("Password is Required");
                         return;
-                    }                else {
+                    }else {
+                        pDialog.dismiss();
                         Password.setError(null);
                         Password.setErrorEnabled(false);
                     }
@@ -88,6 +96,7 @@ public class Admin_Login extends AppCompatActivity {
                         Password.setError("Password Must be >= 6");
                         return;
                     } else {
+                        pDialog.dismiss();
                         Password.setError(null);
                         Password.setErrorEnabled(false);
                     }
@@ -101,7 +110,6 @@ public class Admin_Login extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
-
                                 String db_password = snapshot.child(username).child("password").getValue(String.class);
                                 if(db_password.equals(password)){
                                     String email = snapshot.child(username).child("email").getValue(String.class);
@@ -112,12 +120,14 @@ public class Admin_Login extends AppCompatActivity {
                                             if(task.isSuccessful()){
                                                 startActivity(new Intent(getApplicationContext(), Admin_Home.class));
                                                 finish();
+                                                pDialog.dismiss();
                                             }
                                             else{
                                                 new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.ERROR_TYPE)
                                                         .setTitleText("Oops...")
                                                         .setContentText(task.getException().getMessage())
                                                         .show();
+                                                pDialog.dismiss();
                                             }
                                         }
                                     });
@@ -127,6 +137,7 @@ public class Admin_Login extends AppCompatActivity {
                                             .setTitleText("Oops...")
                                             .setContentText("Wrong Password")
                                             .show();
+                                    pDialog.dismiss();
                                 }
                             }
                             else{
@@ -134,6 +145,7 @@ public class Admin_Login extends AppCompatActivity {
                                         .setTitleText("Oops...")
                                         .setContentText("No DATA Exist")
                                         .show();
+                                pDialog.dismiss();
                             }
                         }
 

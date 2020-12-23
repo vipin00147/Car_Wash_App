@@ -1,5 +1,6 @@
 package com.example.carwashapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -22,6 +23,11 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -36,11 +42,10 @@ public class Book_Appointment_Activity extends AppCompatActivity {
     int new_hour,new_min;
     ImageView calender;
     Button continue_Page;
+
     private int year,day,month,hour, minute;
-    String h1,h2,h3,h4,h5;
     int duration = 0;
-    String p1,p2,p3,p4,p5;
-    String d1,d2,d3,d4,d5;
+    DatabaseReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,25 @@ public class Book_Appointment_Activity extends AppCompatActivity {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book__appointment_);
+
+        //getting name of clicked service center..
+        ref = FirebaseDatabase.getInstance().getReference().child("Service_centers");
+        String Center_name = getIntent().getStringExtra("center_key");
+        ref.child(Center_name).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    CurrentUser.center_name = snapshot.child("center_name").getValue(String.class);
+                    CurrentUser.center_image = snapshot.child("image").getValue(String.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         dateText = findViewById(R.id.time);
         calender = findViewById(R.id.calender);
@@ -104,37 +128,22 @@ public class Book_Appointment_Activity extends AppCompatActivity {
                 String txt = dateText.getEditText().getText().toString();
                 if(c1.isChecked()){
                     total += 100;
-                    h1 = "Vacuuming";
-                    d1 = getResources().getString( R.string.vacuuming);
-                    p1 = "Rs.100";
                     flag = true;
                 }
                 if(c2.isChecked()){
                     total += 100;
-                    h2 = "Brushing - Steam Clean";
-                    d2 = getResources().getString(R.string.brushing);
-                    p2 = "Rs.100";
                     flag = true;
                 }
                 if(c3.isChecked()){
                     total += 200;
-                    h3 = "Glass Cleaning";
-                    d3 = getResources().getString(R.string.polishing);
-                    p3 = "Rs.200";
                     flag = true;
                 }
                 if(c4.isChecked()){
                     total +=60;
-                    h4 = "Leather Cleaning";
-                    d4 = getResources().getString(R.string.trimming);
-                    p4 = "Rs.60";
                     flag = true;
                 }
                 if(c5.isChecked()){
                     total += 60;
-                    h5 = "Perfuming";
-                    d5 = getResources().getString(R.string.perfuming);
-                    p5 = "Rs.60";
                     flag = true;
                 }
                 if(flag == true && !TextUtils.isEmpty(txt)){

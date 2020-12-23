@@ -3,13 +3,17 @@ package com.example.carwashapp;
 import android.graphics.Path;
 
 public class Users {
-    String name,email,phone,password;
+    String name,email,phone,password,image;
     String center_name, Phone_no, Addess, Opening_hours, Pin_code;
-    Users(String name, String email, String password, String phone){
+    Users(String name, String email, String password, String phone,String image,String x){
         this.name = name;
         this.password = password;
         this.email = email;
         this.phone = phone;
+        this.image = image;
+    }
+
+    public Users() {
     }
 
     Users(String center_name, String Phone_no, String Addess, String Opening_hours, String Pin_code){
@@ -19,6 +23,7 @@ public class Users {
         this.Opening_hours = Opening_hours;
         this.Pin_code = Pin_code;
     }
+
 
     public String getEmail() {
         return email;
@@ -90,5 +95,13 @@ public class Users {
 
     public void setPin_code(String Pin_code) {
         Pin_code = Pin_code;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

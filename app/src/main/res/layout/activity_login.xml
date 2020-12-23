@@ -30,7 +30,7 @@
         android:layout_margin="10dp"
         app:boxStrokeColor="#ffffff"
         app:hintTextColor="#ffffff"
-        android:hint="Email or Phone No.."
+        android:hint="Phone No.."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="textNoSuggestions"
+            android:inputType="phone"
+            android:maxLength="10"
             android:textColor="#ffffff"
             android:textSize="20dp" />
 

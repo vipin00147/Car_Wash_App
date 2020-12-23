@@ -100,7 +100,7 @@ public class Register extends AppCompatActivity {
                             reference = rootNode.getReference("Users");
 
                             //setting user to database...
-                            Users users = new Users(name,email,password,phone);
+                            Users users = new Users(name,email,password,phone,"","");
 
                             reference.child(phone).setValue(users);
 

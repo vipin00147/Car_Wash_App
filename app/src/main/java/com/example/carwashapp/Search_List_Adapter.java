@@ -1,6 +1,7 @@
 package com.example.carwashapp;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class Search_List_Adapter extends FirebaseRecyclerAdapter<gettingListFrom
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(),Book_Appointment_Activity.class);
+                intent.putExtra("center_key",getRef(position).getKey());
                 holder.rootView.getContext().startActivity(intent);
             }
         });

@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -54,6 +55,8 @@ public class CreateUserFragment extends Fragment {
                 String EMAIL = email.getEditText().getText().toString().trim();
                 String PASSWORD = password.getEditText().getText().toString().trim();
                 String PHONE = phone.getEditText().getText().toString().trim();
+                String IMAGE = "";
+
 
                 // Register user On fireBase..
                 fAuth.createUserWithEmailAndPassword(EMAIL,PASSWORD).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -65,8 +68,7 @@ public class CreateUserFragment extends Fragment {
                             reference = rootNode.getReference("Users");
 
                             //setting user to database...
-                            Users users = new Users(NAME, EMAIL, PASSWORD, PHONE);
-
+                            Users users = new Users(NAME, EMAIL, PASSWORD, PHONE,"","");
                             reference.child(PHONE).setValue(users);
 
                             SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);

@@ -2,8 +2,13 @@ package com.example.carwashapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.appwidget.AppWidgetHost;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -33,6 +38,7 @@ public class Login extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
+    String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,10 @@ public class Login extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
 
         if(fAuth.getCurrentUser() != null) {
+
+            SharedPreferences getshrd = getSharedPreferences("demo",MODE_PRIVATE);
+            CurrentUser.phone = getshrd.getString("phone","0");
+
             startActivity(new Intent(getApplicationContext(),User_Home.class));
             finish();
         }
@@ -56,27 +66,36 @@ public class Login extends AppCompatActivity {
             Signin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    SweetAlertDialog pDialog = new SweetAlertDialog(Login.this, SweetAlertDialog.PROGRESS_TYPE);
+                    pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                    pDialog.setTitleText("Loading ...");
+                    pDialog.setCancelable(true);
+                    pDialog.show();
+
                     //Getting Values..
 
                     String id = Id.getEditText().getText().toString().trim();
                     String password = Password.getEditText().getText().toString().trim();
-                    if(TextUtils.isEmpty(id)) {
+
+                    if (TextUtils.isEmpty(id)) {
                         Id.setError("Email is required");
                         return;
                     }
-                    if(TextUtils.isEmpty(password)) {
+                    if (TextUtils.isEmpty(password)) {
                         Password.setError("Password is Required");
                         return;
                     }
 
-                    if(password.length()<6) {
+                    if (password.length() < 6) {
                         Password.setError("Password Must be >= 6");
                         return;
                     }
 
-                    if(id.length()==10){
+                    if (id.length() == 10) {
 
                         // Sign in using Phone No and Password...
+
                         rootNode = FirebaseDatabase.getInstance();
                         reference = rootNode.getReference("Users");
 
@@ -84,40 +103,51 @@ public class Login extends AppCompatActivity {
                         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if(snapshot.exists()){
+                                if (snapshot.exists()) {
 
                                     String db_password = snapshot.child(id).child("password").getValue(String.class);
-                                    if(db_password.equals(password)){
-                                        String email = snapshot.child(id).child("email").getValue(String.class);
+                                    if (db_password.equals(password)) {
+                                        email = snapshot.child(id).child("email").getValue(String.class);
 
-                                        fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                                if(task.isSuccessful()){
-                                                    startActivity(new Intent(getApplicationContext(), User_Home.class));
+                                                if (task.isSuccessful()) {
+                                                    //CurrentUser currentUser = new CurrentUser(id);
+                                                    SharedPreferences shrd = getSharedPreferences("demo",MODE_PRIVATE);
+                                                    SharedPreferences.Editor editor = shrd.edit();
+                                                    editor.putString("phone",id);
+                                                    editor.apply();
+
+                                                    SharedPreferences getshrd = getSharedPreferences("demo",MODE_PRIVATE);
+                                                    CurrentUser.phone = getshrd.getString("phone","0");
+
+                                                    Intent intent = new Intent(getApplicationContext(), User_Home.class);
+                                                    startActivity(intent);
                                                     finish();
-                                                }
-                                                else{
+                                                    pDialog.dismiss();
+                                                } else {
                                                     new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
                                                             .setTitleText("Oops...")
                                                             .setContentText(task.getException().getMessage())
                                                             .show();
+                                                    pDialog.dismiss();
                                                 }
                                             }
                                         });
-                                    }
-                                    else{
+                                    } else {
                                         new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
                                                 .setTitleText("Oops...")
                                                 .setContentText("Wrong Password")
                                                 .show();
+                                        pDialog.dismiss();
                                     }
-                                }
-                                else{
+                                } else {
                                     new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
                                             .setTitleText("Oops...")
                                             .setContentText("No DATA Exist")
                                             .show();
+                                    pDialog.dismiss();
                                 }
                             }
 
@@ -128,13 +158,18 @@ public class Login extends AppCompatActivity {
                         });
 
 
-                    }
-                    else {
+                    } else {
+
+                        new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Oops...")
+                                .setContentText("Sign in Using Mobile Number")
+                                .show();
+                        pDialog.dismiss();
                         // Sign in using Email Id and Password...
-                        fAuth.signInWithEmailAndPassword(id,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                       /* fAuth.signInWithEmailAndPassword(id, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()) {
 
                                     new SweetAlertDialog(Login.this, SweetAlertDialog.SUCCESS_TYPE)
                                             .setTitleText("SUCCESS")
@@ -143,15 +178,14 @@ public class Login extends AppCompatActivity {
 
                                     startActivity(new Intent(getApplicationContext(), User_Home.class));
                                     finish();
-                                }
-                                else{
+                                } else {
                                     new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
                                             .setTitleText("Failed")
                                             .setContentText(task.getException().getMessage())
                                             .show();
                                 }
                             }
-                        });
+                        });*/
                     }
                 }
             });

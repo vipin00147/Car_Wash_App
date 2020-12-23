@@ -30,8 +30,6 @@
         app:itemIconTint="@color/nav_color"
         app:itemTextColor="@color/nav_color"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/menu"/>
-
-
+        app:menu="@menu/admin_menu"/>
 
 </RelativeLayout>

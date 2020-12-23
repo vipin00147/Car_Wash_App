@@ -1,5 +1,6 @@
 package com.example.carwashapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,13 +15,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.braintreepayments.cardform.view.CardForm;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class PaymentActivity extends AppCompatActivity {
     AlertDialog.Builder alertBuilder;
     TextView amount, Timing ;
-    String total ;
+    String total, timing;
+    FirebaseAuth fAuth;
+    FirebaseDatabase rootNode;
+    DatabaseReference reference;
+    String NAME, MOBILE, EMAIL, AMOUNT, TIMING;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +47,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         Bundle intent = getIntent().getExtras();
         total = intent.getString("total");
-        String timing = intent.getString("timing");
+        timing = intent.getString("timing");
 
         CardForm cardForm = findViewById(R.id.card_form);
         Button buy = findViewById(R.id.button);
@@ -64,11 +80,22 @@ public class PaymentActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
+                            uploadDetails();
+
 
                             new SweetAlertDialog(PaymentActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                                     .setTitleText("Good job!")
                                     .setContentText("Your appointment is scheduled")
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            startActivity(new Intent(getApplicationContext(), User_Home.class));
+                                        }
+                                    })
                                     .show();
+                            //setting appointment detail of current user
+
+
                         }
                     });
                     alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -88,6 +115,41 @@ public class PaymentActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //uploading appointment  details of current user...
+    private void uploadDetails() {
+        fAuth = FirebaseAuth.getInstance();
+        rootNode = FirebaseDatabase.getInstance();
+        reference = rootNode.getReference().child("Users");
+
+        String email = fAuth.getCurrentUser().getEmail();
+
+        Query checkUser = reference.orderByChild("phone").equalTo(CurrentUser.phone);
+        checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    MOBILE = snapshot.child(CurrentUser.phone).child("phone").getValue(String.class);
+                    EMAIL = snapshot.child(CurrentUser.phone).child("email").getValue(String.class);
+                    NAME = snapshot.child(CurrentUser.phone).child("name").getValue(String.class);
+                    AMOUNT = total;
+                    TIMING = timing;
+
+                    rootNode = FirebaseDatabase.getInstance();
+                    reference = rootNode.getReference().child("Appointment_Booked");
+
+                    UploadApointmentDetail detail = new UploadApointmentDetail(NAME, MOBILE, EMAIL, AMOUNT, TIMING, CurrentUser.center_name, CurrentUser.center_image,"0");
+                    reference.child(MOBILE).setValue(detail);
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
     }
 }

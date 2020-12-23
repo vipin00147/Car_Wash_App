@@ -24,7 +24,6 @@ public class User_Home extends AppCompatActivity {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user__home);
-
         navigation = findViewById(R.id.user_navigation);
         viewPager = findViewById(R.id.user_view_pager);
 
