@@ -12,4 +12,7 @@
     <string name="polishing">A glass cleaner is used to clean the glass. it ensures that the glass remain sparking.</string>
     <string name="trimming">A leather cleaner, saddle soap and leather soap are use to clean all the leather parts.</string>
     <string name="perfuming">Finally, to leave the car with a good scent, a deodorant is used in the car.</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_forget__password_">FullscreenActivity</string>
 </resources>

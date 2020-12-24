@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +43,10 @@ public class User_ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fAuth = FirebaseAuth.getInstance();
+        if(fAuth.getCurrentUser() != null){
+
+        }
+
 
         View view = inflater.inflate(R.layout.fragment_user__profile, container, false);
         Logout = view.findViewById(R.id.user_logout);
@@ -51,7 +57,10 @@ public class User_ProfileFragment extends Fragment {
         Profile_image = view.findViewById(R.id.user_image_one);
 
         SharedPreferences getshrd = getContext().getSharedPreferences("demo",MODE_PRIVATE);
-        Profile_image.setImageURI(Uri.parse(getshrd.getString("image","0")));
+        if(Uri.parse(getshrd.getString("image", "0")).toString().isEmpty())
+            Profile_image.setImageResource(R.drawable.ic_user_profile);
+        else
+            Profile_image.setImageURI(Uri.parse(getshrd.getString("image", "0")));
 
         rootNode = FirebaseDatabase.getInstance();
         reference = rootNode.getReference("Users");
@@ -61,13 +70,15 @@ public class User_ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User_Name.setText(snapshot.child(CurrentUser.phone).child("name").getValue(String.class));
                 User_Email.setText(snapshot.child(CurrentUser.phone).child("email").getValue(String.class));
-                Glide.with(Profile_image.getContext()).load(snapshot.child(CurrentUser.phone).child("image").getValue(String.class)).into(Profile_image);
+                if(snapshot.child(CurrentUser.phone).child("image").getValue(String.class).isEmpty())
+                    Profile_image.setImageResource(R.drawable.ic_user_profile);
+                else
+                    Glide.with(Profile_image.getContext()).load(snapshot.child(CurrentUser.phone).child("image").getValue(String.class)).into(Profile_image);
 
                 SharedPreferences shrd = getContext().getSharedPreferences("demo",MODE_PRIVATE);
                 SharedPreferences.Editor editor = shrd.edit();
                 editor.putString("image",snapshot.child(CurrentUser.phone).child("image").getValue(String.class));
                 editor.apply();
-                return;
             }
 
             @Override

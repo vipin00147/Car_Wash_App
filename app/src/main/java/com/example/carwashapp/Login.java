@@ -2,21 +2,18 @@ package com.example.carwashapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
-import android.appwidget.AppWidgetHost;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -34,7 +31,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class Login extends AppCompatActivity {
     TextInputLayout Id, Password;
     Button Signin,Login_Admin;
-    TextView Signup;
+    TextView Signup, Forget_Password;
     FirebaseAuth fAuth;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
@@ -52,6 +49,7 @@ public class Login extends AppCompatActivity {
         Signin = findViewById(R.id.Signin);
         Login_Admin = findViewById(R.id.Admin_Login);
         Signup = findViewById(R.id.SignUp);
+        Forget_Password = findViewById(R.id.forget_password);
         fAuth = FirebaseAuth.getInstance();
 
         if(fAuth.getCurrentUser() != null) {
@@ -203,5 +201,19 @@ public class Login extends AppCompatActivity {
                     finish();
                 }
             });
+            Forget_Password.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(),Forget_Password_Activity.class));
+                    finish();
+                }
+            });
+    }
+    public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+
     }
 }

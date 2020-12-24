@@ -61,7 +61,10 @@ public class User_Profile_Setting_Activity extends AppCompatActivity {
         reference = rootNode.getReference("Users");
 
         SharedPreferences getshrd = getSharedPreferences("demo",MODE_PRIVATE);
-        Profile_Image.setImageURI(Uri.parse(getshrd.getString("image","0")));
+        if(Uri.parse(getshrd.getString("image", "0")).toString().isEmpty())
+            Profile_Image.setImageResource(R.drawable.ic_user_profile);
+        else
+            Profile_Image.setImageURI(Uri.parse(getshrd.getString("image","0")));
         Name.getEditText().setText(getshrd.getString("name","0"));
         Email.getEditText().setText(getshrd.getString("email","0"));
         Phone.getEditText().setText(getshrd.getString("phone","0"));
@@ -73,7 +76,10 @@ public class User_Profile_Setting_Activity extends AppCompatActivity {
                 Name.getEditText().setText(snapshot.child(CurrentUser.phone).child("name").getValue(String.class));
                 Email.getEditText().setText(snapshot.child(CurrentUser.phone).child("email").getValue(String.class));
                 Phone.getEditText().setText(snapshot.child(CurrentUser.phone).child("phone").getValue(String.class));
-                Glide.with(Profile_Image.getContext()).load(snapshot.child(CurrentUser.phone).child("image").getValue(String.class)).into(Profile_Image);
+                if(snapshot.child(CurrentUser.phone).child("image").getValue(String.class).isEmpty())
+                    Profile_Image.setImageResource(R.drawable.ic_user_profile);
+                else
+                    Glide.with(Profile_Image.getContext()).load(snapshot.child(CurrentUser.phone).child("image").getValue(String.class)).into(Profile_Image);
 
                 SharedPreferences shrd = getSharedPreferences("demo",MODE_PRIVATE);
                 SharedPreferences.Editor editor = shrd.edit();
@@ -118,24 +124,16 @@ public class User_Profile_Setting_Activity extends AppCompatActivity {
                                  HashMap<String,String> hashMap = new HashMap<>();
                                  hashMap.put("image",uri.toString());
                                  reference.child(CurrentUser.phone).child("image").setValue(uri.toString());
-
                                  SharedPreferences shrd = getSharedPreferences("demo",MODE_PRIVATE);
                                  SharedPreferences.Editor editor = shrd.edit();
                                  editor.putString("image",uri.toString());
                                  editor.apply();
-
-                                 return;
                              }
                          });
                     }
                 });
             }
         }
-
-
-
-
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 }

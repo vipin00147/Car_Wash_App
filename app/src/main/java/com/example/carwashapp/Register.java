@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,14 +21,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class Register extends AppCompatActivity {
     TextInputLayout Email, Password, Phone, Name;
     Button Register;
     TextView loginButton;
     FirebaseAuth fAuth;
-    ProgressBar progressBar;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
+    SweetAlertDialog pDialog;
 
 
     @SuppressLint("WrongViewCast")
@@ -44,16 +47,18 @@ public class Register extends AppCompatActivity {
         Phone = findViewById(R.id.phone);
         Register = findViewById(R.id.register);
         loginButton = findViewById(R.id.signin_button);
-        progressBar = findViewById(R.id.progressBar);
         fAuth = FirebaseAuth.getInstance();
-
-        if(fAuth.getCurrentUser() != null){
-            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
-        }
 
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                pDialog = new SweetAlertDialog(Register.this, SweetAlertDialog.PROGRESS_TYPE);
+                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                pDialog.setTitleText("Loading ...");
+                pDialog.setCancelable(true);
+                pDialog.show();
+
                 //Getting Values..
 
                 String email = Email.getEditText().getText().toString().trim();
@@ -63,38 +68,46 @@ public class Register extends AppCompatActivity {
 
                 if(TextUtils.isEmpty(name)) {
                     Name.setError("Name Required");
+                    pDialog.dismiss();
                     return;
                 }
                 if(TextUtils.isEmpty(email)) {
                     Email.setError("Email is required");
+                    pDialog.dismiss();
                     return;
                 }
                 if(TextUtils.isEmpty(password)) {
                     Password.setError("Password is Required");
+                    pDialog.dismiss();
                     return;
                 }
 
                 if(password.length()<6) {
                     Password.setError("Password Must be >= 6");
+                    pDialog.dismiss();
                     return;
                 }
                 if(TextUtils.isEmpty(phone)){
                     Phone.setError("Phone No. required");
+                    pDialog.dismiss();
                     return;
                 }
                 if(phone.length()<10){
                     Phone.setError("Invalid Number");
+                    pDialog.dismiss();
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
 
                 // Register user On fireBase..
                 fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
-                            Toast.makeText(Register.this, "You have registered successfully.", Toast.LENGTH_SHORT).show();
+                            pDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                            pDialog.setTitleText("Congratulations");
+                            pDialog.setContentText("You have registered successfully.");
+                            pDialog.show();
 
                             rootNode = FirebaseDatabase.getInstance();
                             reference = rootNode.getReference("Users");
@@ -105,11 +118,12 @@ public class Register extends AppCompatActivity {
                             reference.child(phone).setValue(users);
 
                             //startActivity(new Intent(getApplicationContext(),Login.class));
-                            progressBar.setVisibility(View.GONE);
                         }
                         else {
-                            Toast.makeText(Register.this, "Error "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
+                            pDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                            pDialog.setTitleText("Error");
+                            pDialog.setContentText(task.getException().getMessage());
+                            pDialog.show();
                         }
                     }
                 });
@@ -122,5 +136,11 @@ public class Register extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }
         });
+    }
+    public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 }
