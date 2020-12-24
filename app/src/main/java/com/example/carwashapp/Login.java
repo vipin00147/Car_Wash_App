@@ -160,7 +160,7 @@ public class Login extends AppCompatActivity {
 
                         new SweetAlertDialog(Login.this, SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Oops...")
-                                .setContentText("Sign in Using Mobile Number")
+                                .setContentText("Invalid Number")
                                 .show();
                         pDialog.dismiss();
                         // Sign in using Email Id and Password...

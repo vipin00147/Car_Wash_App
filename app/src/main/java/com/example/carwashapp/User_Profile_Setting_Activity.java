@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class User_Profile_Setting_Activity extends AppCompatActivity {
@@ -40,7 +42,8 @@ public class User_Profile_Setting_Activity extends AppCompatActivity {
     TextInputLayout Name,Email,Phone;
     StorageReference Folder;
     FloatingActionButton fab;
-
+    Button save;
+    SweetAlertDialog pDialog;
     public static final int ImageBack = 1;
 
     @Override
@@ -50,9 +53,12 @@ public class User_Profile_Setting_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user__profile__setting_);
 
+        pDialog = new SweetAlertDialog(User_Profile_Setting_Activity.this, SweetAlertDialog.PROGRESS_TYPE);
+
         Name = findViewById(R.id.Edit_Name);
         Email = findViewById(R.id.Edit_Email);
         Phone = findViewById(R.id.Edit_Phone);
+        save = findViewById(R.id.save);
         Profile_Image = findViewById(R.id.image);
         fab = findViewById(R.id.floatingActionButton);
 
@@ -65,6 +71,8 @@ public class User_Profile_Setting_Activity extends AppCompatActivity {
             Profile_Image.setImageResource(R.drawable.ic_user_profile);
         else
             Profile_Image.setImageURI(Uri.parse(getshrd.getString("image","0")));
+
+        // Setting user data to Shared Preferences for fast execution...
         Name.getEditText().setText(getshrd.getString("name","0"));
         Email.getEditText().setText(getshrd.getString("email","0"));
         Phone.getEditText().setText(getshrd.getString("phone","0"));
@@ -104,6 +112,40 @@ public class User_Profile_Setting_Activity extends AppCompatActivity {
                 startActivityForResult(intent,ImageBack);
             }
         });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = Name.getEditText().getText().toString();
+                if(!name.isEmpty()) {
+
+                    //updating user detail....
+                    Query checkUser = reference.orderByChild("phone").equalTo(CurrentUser.phone);
+                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            reference.child(CurrentUser.phone).child("name").setValue(name);
+
+                            pDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                            pDialog.setTitleText("SUCCESS");
+                            pDialog.setContentText("Updated");
+                            pDialog.show();
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+                else{
+                    pDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                    pDialog.setTitleText("Error");
+                    pDialog.setContentText("All Fields Are Required");
+                    pDialog.show();
+                }
+            }
+        });
     }
 
     @Override
@@ -123,6 +165,7 @@ public class User_Profile_Setting_Activity extends AppCompatActivity {
                              public void onSuccess(Uri uri) {
                                  HashMap<String,String> hashMap = new HashMap<>();
                                  hashMap.put("image",uri.toString());
+                                 Profile_Image.setImageURI(Uri.parse(uri.toString()));
                                  reference.child(CurrentUser.phone).child("image").setValue(uri.toString());
                                  SharedPreferences shrd = getSharedPreferences("demo",MODE_PRIVATE);
                                  SharedPreferences.Editor editor = shrd.edit();

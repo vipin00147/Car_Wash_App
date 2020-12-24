@@ -40,8 +40,8 @@
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
@@ -73,17 +73,6 @@
                 android:textSize="16dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/pen_one"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="15dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintBottom_toBottomOf="@+id/Edit_Name"
-            app:layout_constraintEnd_toEndOf="@+id/Edit_Name"
-            app:layout_constraintTop_toTopOf="@+id/Edit_Name" />
     </LinearLayout>
 
     <LinearLayout
@@ -97,8 +86,8 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
@@ -125,22 +114,12 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:backgroundTint="#ffffff"
+                android:focusable="false"
                 android:inputType="textNoSuggestions"
                 android:textColor="#000000"
                 android:textSize="16dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/pen_two"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="15dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintBottom_toBottomOf="@+id/Edit_Name"
-            app:layout_constraintEnd_toEndOf="@+id/Edit_Name"
-            app:layout_constraintTop_toTopOf="@+id/Edit_Name" />
     </LinearLayout>
 
     <LinearLayout
@@ -154,8 +133,8 @@
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
@@ -182,22 +161,13 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:backgroundTint="#ffffff"
-                android:inputType="textNoSuggestions"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:focusable="false"
                 android:textColor="#000000"
                 android:textSize="16dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/pen_three"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="15dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintBottom_toBottomOf="@+id/Edit_Name"
-            app:layout_constraintEnd_toEndOf="@+id/Edit_Name"
-            app:layout_constraintTop_toTopOf="@+id/Edit_Name" />
     </LinearLayout>
 
     <Button
