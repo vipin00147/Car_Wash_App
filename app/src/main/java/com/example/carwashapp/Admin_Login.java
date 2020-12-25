@@ -57,8 +57,11 @@ public class Admin_Login extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),Admin_Home.class));
                 finish();
             }
+            else{
+                fAuth.signOut();
+            }
         }
-        catch (Exception e){
+       catch (Exception e){
             e.printStackTrace();
         }
             //Login As Admin..
@@ -75,6 +78,7 @@ public class Admin_Login extends AppCompatActivity {
                     String username = Username.getEditText().getText().toString().trim();
                     String password = Password.getEditText().getText().toString().trim();
                     if(TextUtils.isEmpty(username)) {
+                        pDialog.dismiss();
                         Username.setError("Username is required");
                         return;
                     }
@@ -84,6 +88,7 @@ public class Admin_Login extends AppCompatActivity {
                         Username.setErrorEnabled(false);
                     }
                     if(TextUtils.isEmpty(password)) {
+                        pDialog.dismiss();
                         Password.setError("Password is Required");
                         return;
                     }else {
@@ -93,6 +98,7 @@ public class Admin_Login extends AppCompatActivity {
                     }
 
                     if(password.length()<6) {
+                        pDialog.dismiss();
                         Password.setError("Password Must be >= 6");
                         return;
                     } else {
@@ -110,6 +116,9 @@ public class Admin_Login extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
+                                new SweetAlertDialog(Admin_Login.this, SweetAlertDialog.PROGRESS_TYPE)
+                                        .setTitleText("Loading")
+                                        .show();
                                 String db_password = snapshot.child(username).child("password").getValue(String.class);
                                 if(db_password.equals(password)){
                                     String email = snapshot.child(username).child("email").getValue(String.class);
@@ -180,6 +189,5 @@ public class Admin_Login extends AppCompatActivity {
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(a);
-
     }
 }

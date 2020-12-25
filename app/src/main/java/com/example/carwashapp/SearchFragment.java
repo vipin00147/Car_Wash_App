@@ -33,7 +33,6 @@ public class SearchFragment extends Fragment {
     RecyclerView recyclerView;
     DatabaseReference reference;
     SearchView searchView;
-    Button book_appointment;
     Search_List_Adapter adapter;
 
     @Override
@@ -46,7 +45,6 @@ public class SearchFragment extends Fragment {
         recyclerView = view.findViewById(R.id.reyclerView1);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        book_appointment = view.findViewById(R.id.book_appointment);
         searchView = view.findViewById(R.id.searchView);
 
         FirebaseRecyclerOptions<gettingListFromFirebase> options =

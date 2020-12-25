@@ -37,7 +37,7 @@ public class profileFragment extends Fragment {
     FirebaseDatabase rootNode;
     DatabaseReference referance;
     TextInputLayout edit_password, edit_email, edit_phone;
-    TextView name, email,update_email;
+    TextView name, email;
     MaterialButton save, logout;
 
     @Override
@@ -50,7 +50,6 @@ public class profileFragment extends Fragment {
         edit_email = view.findViewById(R.id.edit_email);
         edit_password = view.findViewById(R.id.edit_password);
         edit_phone = view.findViewById(R.id.edit_phone);
-        update_email = view.findViewById(R.id.update_admin_email);
         save = view.findViewById(R.id.save_edit);
         logout = view.findViewById(R.id.admin_logout);
         fAuth = FirebaseAuth.getInstance();
@@ -145,14 +144,6 @@ public class profileFragment extends Fragment {
             }
         });
 
-        update_email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = edit_email.getEditText().getText().toString().trim();
-                fAuth.getCurrentUser().updateEmail(email);
-            }
-        });
-
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,5 +152,11 @@ public class profileFragment extends Fragment {
             }
         });
             return view;
+    }
+    public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 }
