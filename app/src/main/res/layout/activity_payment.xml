@@ -54,6 +54,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
+    <CheckBox
+        android:id="@+id/cod"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="cash on delivery"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/cod"
+        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
     <TextView
         android:id="@+id/textView8"
         android:layout_width="match_parent"
@@ -64,7 +84,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+        app:layout_constraintTop_toBottomOf="@+id/cod" />
 
     <com.braintreepayments.cardform.view.CardForm
         android:id="@+id/card_form"
@@ -72,7 +92,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
         android:layout_centerHorizontal="true"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/textView8"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"

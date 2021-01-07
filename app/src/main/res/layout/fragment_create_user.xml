@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg1"
     tools:context=".CreateUserFragment">
 
     <TextView
@@ -11,28 +12,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="56dp"
+        android:fontFamily="serif"
         android:gravity="center_horizontal"
         android:text="create A New User"
-        android:textColor="#03A9F4"
-        android:fontFamily="serif"
+        android:textColor="#ffffff"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="300dp"
-        android:layout_height="337dp"
+        android:layout_width="match_parent"
+        android:layout_height="399dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         app:cardCornerRadius="25dp"
         app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -40,7 +46,9 @@
             android:id="@+id/linear_layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="50dp"
+            android:layout_marginRight="30dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -71,7 +79,9 @@
             android:id="@+id/linear_layout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="110dp"
+            android:layout_marginRight="30dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -102,7 +112,9 @@
             android:id="@+id/linear_layout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="170dp"
+            android:layout_marginRight="30dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -134,7 +146,9 @@
             android:id="@+id/linear_layout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="230dp"
+            android:layout_marginRight="30dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -188,7 +202,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="45dp"
         app:cardCornerRadius="45dp"
         app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"

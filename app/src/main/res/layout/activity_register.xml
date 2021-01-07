@@ -45,13 +45,12 @@
             android:hint="Full Name"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            app:boxStrokeColor="#ffffff"
-            app:hintTextColor="#ffffff"
-            android:textColorHint="#ffffff">
+            app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color"
+            app:hintTextColor="#000000">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:textSize="20dp"
                 android:inputType="textNoSuggestions" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -65,13 +64,12 @@
             android:hint="Email"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            app:boxStrokeColor="#ffffff"
-            app:hintTextColor="#ffffff"
-            android:textColorHint="#ffffff">
+            app:boxStrokeColor="#000000"
+            app:hintTextColor="#000000">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:textSize="20dp"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -82,16 +80,15 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="220dp"
-            app:boxStrokeColor="#ffffff"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            app:hintTextColor="#ffffff"
-            android:textColorHint="#ffffff"
+            app:boxStrokeColor="#000000"
+            app:hintTextColor="#000000"
             android:hint="Password"
             app:passwordToggleEnabled="true">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:layout_height="match_parent"
                 android:textSize="20dp"
                 android:inputType="textPassword" />
@@ -106,13 +103,12 @@
             android:hint="Phone No"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            app:boxStrokeColor="#ffffff"
-            app:hintTextColor="#ffffff"
-            android:textColorHint="#ffffff">
+            app:boxStrokeColor="#000000"
+            app:hintTextColor="#000000">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:textSize="20dp"
                 android:inputType="phone" />
         </com.google.android.material.textfield.TextInputLayout>

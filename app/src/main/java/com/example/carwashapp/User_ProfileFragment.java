@@ -101,7 +101,8 @@ public class User_ProfileFragment extends Fragment {
         User_Support.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+               //Intent intent = new Intent(getContext(),Help_And_Support.class);
+                //startActivity(intent);
             }
         });
 

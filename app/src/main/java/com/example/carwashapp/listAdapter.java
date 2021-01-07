@@ -7,11 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -42,6 +45,7 @@ public class listAdapter extends FirebaseRecyclerAdapter<gettingListFromFirebase
     public class viewHolder extends RecyclerView.ViewHolder {
         CircleImageView imageView;
         TextView center_name, address, phone, pin_code, open_hours;
+        View view;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -51,6 +55,7 @@ public class listAdapter extends FirebaseRecyclerAdapter<gettingListFromFirebase
             phone = (TextView) itemView.findViewById(R.id.center_phone);
             pin_code = (TextView) itemView.findViewById(R.id.center_pin);
             open_hours = (TextView) itemView.findViewById(R.id.center_time);
+            view = itemView;
         }
     }
 }

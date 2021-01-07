@@ -77,15 +77,18 @@ public class Login extends AppCompatActivity {
                     String password = Password.getEditText().getText().toString().trim();
 
                     if (TextUtils.isEmpty(id)) {
+                        pDialog.dismiss();
                         Id.setError("Email is required");
                         return;
                     }
                     if (TextUtils.isEmpty(password)) {
+                        pDialog.dismiss();
                         Password.setError("Password is Required");
                         return;
                     }
 
                     if (password.length() < 6) {
+                        pDialog.dismiss();
                         Password.setError("Password Must be >= 6");
                         return;
                     }

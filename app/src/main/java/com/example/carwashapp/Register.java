@@ -2,12 +2,15 @@ package com.example.carwashapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -36,9 +39,9 @@ public class Register extends AppCompatActivity {
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_register);
 
         Email = findViewById(R.id.email);
@@ -133,7 +136,20 @@ public class Register extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                if(fAuth.getCurrentUser() !=null){
+                    if(fAuth.getCurrentUser().getEmail() == "vipin00147@gmail.com" || fAuth.getCurrentUser().getEmail() == "srj2264@gmail.com"){
+                        startActivity(new Intent(getApplicationContext(),Admin_Login.class));
+                        finish();
+                    }
+                    else{
+                        startActivity(new Intent(getApplicationContext(),Login.class));
+                        finish();
+                    }
+                }
+                else{
+                    startActivity(new Intent(getApplicationContext(),Login.class));
+                    finish();
+                }
             }
         });
     }

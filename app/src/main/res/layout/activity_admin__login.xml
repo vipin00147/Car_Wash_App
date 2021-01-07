@@ -32,9 +32,8 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:hint="Username"
-        android:textColorHint="#ffffff"
-        app:boxStrokeColor="#ffffff"
-        app:hintTextColor="#ffffff"
+        app:boxStrokeColor="#000000"
+        app:hintTextColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="text"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textSize="20dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -58,9 +57,8 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:hint="Password"
-        app:boxStrokeColor="#ffffff"
-        app:hintTextColor="#ffffff"
-        android:textColorHint="#ffffff"
+        app:boxStrokeColor="#000000"
+        app:hintTextColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPassword"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textSize="20dp" />
 
     </com.google.android.material.textfield.TextInputLayout>

@@ -11,6 +11,7 @@ import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class PaymentActivity extends AppCompatActivity {
     String total, timing;
     FirebaseAuth fAuth;
     FirebaseDatabase rootNode;
+    CheckBox cod;
     DatabaseReference reference;
     String NAME, MOBILE, EMAIL, AMOUNT, TIMING;
 
@@ -53,6 +55,7 @@ public class PaymentActivity extends AppCompatActivity {
         Button buy = findViewById(R.id.button);
         amount = findViewById(R.id.amount_total);
         Timing = findViewById(R.id.textView7);
+        cod = findViewById(R.id.cod);
 
         amount.setText("Rs."+total);
         Timing.setText("Appointment Timing : "+timing);
@@ -68,6 +71,19 @@ public class PaymentActivity extends AppCompatActivity {
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (cod.isChecked()) {
+                    new SweetAlertDialog(PaymentActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("Good job!")
+                            .setContentText("Your appointment is scheduled")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    uploadDetails();
+                                    startActivity(new Intent(getApplicationContext(), User_Home.class));
+                                }
+                            })
+                            .show();
+                } else {
                 if (cardForm.isValid()) {
                     alertBuilder = new AlertDialog.Builder(PaymentActivity.this);
                     alertBuilder.setTitle("Confirm before purchase");
@@ -113,6 +129,7 @@ public class PaymentActivity extends AppCompatActivity {
                             .setContentText("Please Complete the form")
                             .show();
                 }
+            }
             }
         });
     }
