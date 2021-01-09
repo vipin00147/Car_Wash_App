@@ -3,10 +3,10 @@ package com.example.carwashapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,12 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.braintreepayments.cardform.view.CardForm;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,13 +22,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class PaymentActivity extends AppCompatActivity {
     AlertDialog.Builder alertBuilder;
     TextView amount, Timing ;
-    String total, timing;
+    String total, timing, vehicle_number, vehicle_type;
     FirebaseAuth fAuth;
     FirebaseDatabase rootNode;
     CheckBox cod;
@@ -50,6 +50,8 @@ public class PaymentActivity extends AppCompatActivity {
         Bundle intent = getIntent().getExtras();
         total = intent.getString("total");
         timing = intent.getString("timing");
+        vehicle_number = intent.getString("vehicle_number");
+        vehicle_type = intent.getString("vehicle_type");
 
         CardForm cardForm = findViewById(R.id.card_form);
         Button buy = findViewById(R.id.button);
@@ -98,7 +100,6 @@ public class PaymentActivity extends AppCompatActivity {
                             dialogInterface.dismiss();
                             uploadDetails();
 
-
                             new SweetAlertDialog(PaymentActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                                     .setTitleText("Good job!")
                                     .setContentText("Your appointment is scheduled")
@@ -132,6 +133,8 @@ public class PaymentActivity extends AppCompatActivity {
             }
             }
         });
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
     //uploading appointment  details of current user...
@@ -156,7 +159,7 @@ public class PaymentActivity extends AppCompatActivity {
                     rootNode = FirebaseDatabase.getInstance();
                     reference = rootNode.getReference().child("Appointment_Booked");
 
-                    UploadApointmentDetail detail = new UploadApointmentDetail(NAME, MOBILE, EMAIL, AMOUNT, TIMING, CurrentUser.center_name, CurrentUser.center_image,"0");
+                    UploadApointmentDetail detail = new UploadApointmentDetail(NAME, MOBILE, EMAIL, AMOUNT, TIMING, CurrentUser.center_name, CurrentUser.center_image,"0", vehicle_number, vehicle_type);
                     reference.child(MOBILE).setValue(detail);
 
                 }

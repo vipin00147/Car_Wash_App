@@ -12,11 +12,14 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -35,14 +38,17 @@ import static android.app.ProgressDialog.show;
 
 public class Book_Appointment_Activity extends AppCompatActivity {
 
-    TextInputLayout dateText;
+    TextInputLayout dateText,vehicle_number;
     CheckBox c1,c2,c3,c4,c5;
     private int total =0 ;
-    Boolean flag;
+    Boolean flag1;
+    int flag = 0;
     int new_hour,new_min;
     ImageView calender;
+    String VEHICLE_TYPE,VEHICLE_NUMBER;
     Button continue_Page;
-
+    Spinner spin;
+    String[] vehicle = { "Car", "Bike", "Scooter", "Auto", "Tractor" };
     private int year,day,month,hour, minute;
     int duration = 0;
     DatabaseReference ref;
@@ -54,9 +60,15 @@ public class Book_Appointment_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book__appointment_);
 
+        vehicle_number = findViewById(R.id.vehicle_number);
+
         //getting name of clicked service center..
         ref = FirebaseDatabase.getInstance().getReference().child("Service_centers");
         String Center_name = getIntent().getStringExtra("center_key");
+
+        //dropdown for select vehicle type...
+        spin = (Spinner) findViewById(R.id.select_vehicle);
+
         ref.child(Center_name).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -118,48 +130,73 @@ public class Book_Appointment_Activity extends AppCompatActivity {
             }
         });
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, vehicle);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(adapter);
+        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                VEHICLE_TYPE = vehicle[position];
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         //button listener to check if the service is selected or not..
         continue_Page.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 total = 0;
+                flag = 0;
                 duration = 0;
-                flag = false;
+                flag1 = false;
+                VEHICLE_NUMBER = vehicle_number.getEditText().getText().toString();
                 String txt = dateText.getEditText().getText().toString();
                 if(c1.isChecked()){
                     total += 100;
-                    flag = true;
+                    flag1 = true;
                 }
                 if(c2.isChecked()){
                     total += 100;
-                    flag = true;
+                    flag1 = true;
                 }
                 if(c3.isChecked()){
                     total += 200;
-                    flag = true;
+                    flag1 = true;
                 }
                 if(c4.isChecked()){
                     total +=60;
-                    flag = true;
+                    flag1 = true;
                 }
                 if(c5.isChecked()){
                     total += 60;
-                    flag = true;
+                    flag1 = true;
                 }
-                if(flag == true && !TextUtils.isEmpty(txt)){
+
+                if(flag1 == true && !TextUtils.isEmpty(txt) && !TextUtils.isEmpty(VEHICLE_TYPE) && !TextUtils.isEmpty(VEHICLE_NUMBER)){
 
                     //Go to Appointment Review Fragment...
                     Intent intent = new Intent(getApplicationContext(),PaymentActivity.class);
                     intent.putExtra("total",total+"");
                     intent.putExtra("timing",dateText.getEditText().getText().toString());
+                    intent.putExtra("vehicle_number",VEHICLE_NUMBER);
+                    intent.putExtra("vehicle_type",VEHICLE_TYPE);
                     startActivity(intent);
 
                 }
                 else{
-                    if(flag == false)
+                    if(flag1 == false)
                         Toast.makeText(Book_Appointment_Activity.this, "Select a Service", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(Book_Appointment_Activity.this, "Set Appointment date & Time", Toast.LENGTH_SHORT).show();
+                    if(TextUtils.isEmpty(VEHICLE_NUMBER) && TextUtils.isEmpty(VEHICLE_TYPE))
+                        Toast.makeText(Book_Appointment_Activity.this, "Enter Vehicle Number and Select Vehicle Type", Toast.LENGTH_SHORT).show();
+                    else if(TextUtils.isEmpty(VEHICLE_NUMBER))
+                        Toast.makeText(Book_Appointment_Activity.this, "Enter Vehicle Number", Toast.LENGTH_SHORT).show();
+                    else if(TextUtils.isEmpty(VEHICLE_TYPE))
+                        Toast.makeText(Book_Appointment_Activity.this, "Select Vehicle Type", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -7,10 +7,15 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,11 +39,13 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class User_ProfileFragment extends Fragment {
 
-    TextView Logout, User_Name, User_Email,User_Profile,User_Support;
+    TextView Logout, User_Name, User_Email,User_Profile,User_Support,about_us, user_booking;
     CircleImageView Profile_image;
     FirebaseAuth fAuth;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
+    BottomNavigationView navigation;
+    ViewPager viewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,7 +62,11 @@ public class User_ProfileFragment extends Fragment {
         User_Email = view.findViewById(R.id.user_email);
         User_Profile = view.findViewById(R.id.user_profile);
         User_Support = view.findViewById(R.id.user_support);
+        about_us = view.findViewById(R.id.about_us);
         Profile_image = view.findViewById(R.id.user_image_one);
+        user_booking = view.findViewById(R.id.user_booking);
+        navigation = view.findViewById(R.id.user_navigation);
+        viewPager = view.findViewById(R.id.user_view_pager);
 
         SharedPreferences getshrd = getContext().getSharedPreferences("demo",MODE_PRIVATE);
         if(Uri.parse(getshrd.getString("image", "0")).toString().isEmpty())
@@ -88,8 +100,6 @@ public class User_ProfileFragment extends Fragment {
         });
 
 
-
-
         User_Profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +113,13 @@ public class User_ProfileFragment extends Fragment {
             public void onClick(View view) {
                //Intent intent = new Intent(getContext(),Help_And_Support.class);
                 //startActivity(intent);
+            }
+        });
+
+        about_us.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(),About_Us.class));
             }
         });
 

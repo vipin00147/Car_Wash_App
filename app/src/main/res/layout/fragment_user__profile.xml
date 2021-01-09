@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/user_profile_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".profileFragment">
@@ -139,10 +139,10 @@
             android:layout_marginLeft="70dp"
             android:src="@drawable/ic_passbook" />
         <TextView
-            android:id="@+id/user_passbook"
+            android:id="@+id/about_us"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Passbook"
+            android:text="About Us"
             android:textSize="18sp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"

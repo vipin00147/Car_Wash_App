@@ -438,6 +438,63 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
+        <View
+            android:id="@+id/divider5"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout4" />
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Other Services"
+            android:textSize="18sp"
+            android:layout_marginLeft="30dp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txtVw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="Select Vehicle Type:"
+                android:textStyle="bold"
+                android:textSize="15dp" />
+            <Spinner
+                android:id="@+id/select_vehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/txtVw"
+                android:layout_toRightOf="@+id/txtVw" />
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/vehicle_number"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:hint="Vehicle Number"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color"
+            app:hintTextColor="#000000">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:inputType="textNoSuggestions" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/Continue"
             android:layout_width="match_parent"
@@ -450,7 +507,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
 
     </LinearLayout>
 </ScrollView>
